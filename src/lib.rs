@@ -30,12 +30,16 @@ pub struct Ranged<T, Min, Max> {
     _marker: PhantomData<(Min, Max)>,
 }
 
-pub trait RangedBuilder<Min, Max> where Self: Sized {
+pub trait RangedBuilder<Min, Max>
+    where Self: Sized
+{
     fn new(val: Self) -> Ranged<Self, Min, Max>;
 }
 
 use core::fmt;
-impl<T, Min, Max> fmt::Display for Ranged<T, Min, Max> where T: fmt::Display {
+impl<T, Min, Max> fmt::Display for Ranged<T, Min, Max>
+    where T: fmt::Display
+{
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.val.fmt(f)
     }
@@ -65,11 +69,16 @@ impl_ranged_builder!(Unsigned; u8, to_u8, u16, to_u16, u32, to_u32, u64, to_u64)
 impl<T, Min, Max> RangedBuilder<Min, Max> for T {
     #[inline]
     fn new(val: T) -> Ranged<T, Min, Max> {
-        Ranged { val: val, _marker: PhantomData }
+        Ranged {
+            val: val,
+            _marker: PhantomData,
+        }
     }
 }
 
-impl<T, Min, Max> Ranged<T, Min, Max> where T: RangedBuilder<Min, Max> {
+impl<T, Min, Max> Ranged<T, Min, Max>
+    where T: RangedBuilder<Min, Max>
+{
     #[inline]
     pub fn new(val: T) -> Ranged<T, Min, Max> {
         RangedBuilder::new(val)
@@ -96,4 +105,5 @@ macro_rules! impl_binary_op {
     );
 }
 
-impl_binary_op!(Add add +, Sub sub -, Mul mul *, Div div /, Rem rem %, BitAnd bitand &, BitOr bitor |, BitXor bitxor ^);
+impl_binary_op!(Add add +, Sub sub -, Mul mul *, Div div /, Rem rem %,
+                BitAnd bitand &, BitOr bitor |, BitXor bitxor ^);
