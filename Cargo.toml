@@ -1,0 +1,7 @@
+[package]
+name = "ranged"
+version = "0.1.0"
+authors = ["Paho Lurie-Gregg <paho@paholg.com>"]
+
+[dependencies]
+  typenum = "1.8.0"
