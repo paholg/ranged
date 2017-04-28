@@ -20,7 +20,7 @@ script:
     PATH=$PATH:~/.cargo/bin cargo fmt -- --write-mode=diff &&
     travis-cargo build &&
     travis-cargo test &&
-    travis-cargo test --release &&
+    travis-cargo test -- --release &&
     travis-cargo --only stable doc
 
 after_success:
