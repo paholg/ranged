@@ -1,0 +1,35 @@
+language: rust
+sudo: false
+rust:
+  - stable
+  - nightly
+  - beta
+cache: cargo
+
+notifications:
+  email:
+    recipients: paho@paholg.com
+
+before_script:
+  - pip install 'travis-cargo<0.2' --user && export PATH=$HOME/.local/bin:$PATH
+  - export TRAVIS_CARGO_NIGHTLY_FEATURE=""
+  - test -x $HOME/.cargo/bin/rustfmt || cargo install rustfmt # Only install rustfmt if it's not there
+
+script:
+  - |
+    PATH=$PATH:~/.cargo/bin cargo fmt -- --write-mode=diff &&
+    travis-cargo build &&
+    travis-cargo test &&
+    travis-cargo test --release &&
+    travis-cargo --only stable doc
+
+after_success:
+  - travis-cargo --only stable doc-upload
+  # - test $TRAVIS_PULL_REQUEST == "false" &&
+  #   test $TRAVIS_BRANCH == "master" &&
+  #   cargo publish --token ${CRATESIO_TOKEN}
+
+env:
+  global:
+    # GH_TOKEN
+    - secure: "9c0a14580cb99fb47dc4aae08d1c5804703bdfb7"
